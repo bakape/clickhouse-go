@@ -44,9 +44,10 @@ func (stmt *stmt) ExecContext(ctx context.Context, args []driver.NamedValue) (dr
 func (stmt *stmt) execContext(ctx context.Context, args []driver.Value) (driver.Result, error) {
 	if stmt.isInsert {
 		stmt.counter++
-		if err := stmt.ch.block.AppendRow(args); err != nil {
-			return nil, err
-		}
+		// TODO: check for `format CSV` here
+		// if err := stmt.ch.block.AppendRow(args); err != nil {
+		// 	return nil, err
+		// }
 		if (stmt.counter % stmt.ch.blockSize) == 0 {
 			stmt.ch.logf("[exec] flush block")
 			if err := stmt.ch.writeBlock(stmt.ch.block); err != nil {
